@@ -1,0 +1,61 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="MSBuildTasks" Version="1.5.0.235">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="SPTarkov.Common" Version="4.0.8" />
+        <PackageReference Include="SPTarkov.DI" Version="4.0.8" />
+        <PackageReference Include="SPTarkov.Reflection" Version="4.0.8" />
+        <PackageReference Include="SPTarkov.Server.Core" Version="4.0.8" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Update="Config\config.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
+    <Target Name="PackageMod" AfterTargets="Build">
+        <PropertyGroup>
+            <Username>gorecreek</Username>
+            <FolderName>$(Username)-$(MSBuildProjectName)</FolderName>
+            <ModsRoot>$(TargetDir)SPT\user\mods\$(FolderName)</ModsRoot>
+            <LiveModsRoot>..\..\..\SPT\user\mods\$(FolderName)</LiveModsRoot>
+        </PropertyGroup>
+
+        <ItemGroup>
+            <ModFiles Include="$(TargetPath)" />
+            <ModFiles Include="$(TargetDir)Config\config.json" />
+        </ItemGroup>
+
+        <Message Text="Copying to SPT server mods directory (assuming the project is in %SPT_folder%\Development) [$(LiveModsRoot)]..." Importance="High" />
+        <MakeDir Directories="$(LiveModsRoot)" />
+        <Copy SourceFiles="@(ModFiles)" DestinationFolder="$(LiveModsRoot)" />
+
+        <Message Text="Creating folder structure [$(ModsRoot)]..." Importance="High" />
+        <MakeDir Directories="$(ModsRoot)" />
+        <Copy SourceFiles="@(ModFiles)" DestinationFolder="$(ModsRoot)" />
+
+        <Message Text="Zipping [$(TargetDir)$(FolderName).zip]..." Importance="High" />
+        <ItemGroup>
+            <ZipFiles Include="$(ModsRoot)\**\*" />
+        </ItemGroup>
+
+        <Zip ZipFileName="$(TargetDir)$(FolderName).zip"
+             WorkingDirectory="$(TargetDir)"
+             Files="@(ZipFiles)" />
+
+        <Message Text="Cleaning up build folder [$(TargetDir)SPT]..." Importance="High" />
+        <RemoveDir Directories="$(TargetDir)SPT" />
+
+        <Message Text="Mod packaged successfully." Importance="High" />
+    </Target>
+</Project>

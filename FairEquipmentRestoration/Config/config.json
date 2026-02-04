@@ -1,0 +1,37 @@
+{
+  // Toggle the mod
+  // Default = true
+  "enable": true,
+
+  // Restore items from last transfer instead of raid start
+  // Default = false
+  "updateOnTransfer": false,
+
+  // Only restore items in slots that are lost on death (SPT lostondeath.json config)
+  // Default = true
+  "restoreOnlyLostOnDeathSlots": true,
+
+  // Restore items that were lost in raid
+  // Will restore used ammo, consumables and thrown out items
+  // Default = false
+  "restoreLostItems": false,
+
+  // Restore pre-raid item condition
+  // Will cancel out all gear wear and partial item consumption in raid
+  // Default = false
+  "restoreItemCondition": false,
+
+  // Restore the insured status on restored items
+  // Will not work for items returned in mail
+  // Default = true
+  "restoreInsurance": true,
+
+  // Restore found in raid flag on restored items
+  // Will not work for items returned by insurance
+  // Default = false
+  "restoreFoundInRaid": false,
+
+  // Enable item debug logs, will dump everything
+  // Default = false
+  "enableItemDebugLogging": false
+}
