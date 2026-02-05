@@ -59,6 +59,7 @@ body:
       description: |
         Upload or paste the contents of your server log file located in `SPT/user/logs/` that is the most recent.
         If it doesn't fit or you don't want to paste the whole file you can paste just the portion of the log related to the mod.
+        Search by 'FairEquipmentRestoration' to find the relevant portion of the log.
       placeholder: "Paste log contents or drag & drop the file..."
       render: text
     validations:
