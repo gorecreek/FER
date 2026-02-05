@@ -10,6 +10,9 @@ If you’ve ever noticed the inconsistency where softcore implementations restor
 - Handles transfers and the mail service
 - Configuration toggles for most features
 
+## Installation
+Drag and drop the contents of the downloaded ZIP to the SPT root folder, just like other mods.
+
 ## Configuration
 The default configuration assumes that item state should always be preserved after a raid. You are free to configure it to behave almost like a full rollback (item-wise) if you want though. Changes to lostondeath.json are not supported, as they may break insurance handling in some cases.
 
@@ -43,7 +46,7 @@ This is a server-only mod.
 - Fika compatibility unknown
 - SVM is compatible, but Softcore and Safe Exit must be disabled to avoid issues
 - lostondeath.json wipeOnRaidStart=true prevents the mod from working because the mod does not get the pre-raid inventory, keep set to false
-- lostondeath.json individual slot changes will work but some setups can allow item duplication via insurance, either don't change it or don't use insurance
+- lostondeath.json individual slot changes will work, but some setups can allow item duplication via insurance, either don't change it or don't use insurance
 - MergeConsumables is compatible: if you restore the condition of a starting item with some other item (by dragging and dropping it onto the starting item) during a raid and then die, it will return correctly, with its condition depending on whether you had restoreCondition enabled. However, if you fully consume that item to restore the condition of another item, it will be treated as lost.
 
 ## Known issues
