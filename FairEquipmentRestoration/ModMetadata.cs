@@ -5,7 +5,7 @@ namespace FairEquipmentRestoration;
 public record ModMetadata : AbstractModMetadata
 {
     public override string ModGuid { get; init; } = "com.gorecreek.fairequipmentrestoration";
-    public override string Name { get; init; } = "FairEquipmentRestoration";
+    public override string Name { get; init; } = "Fair Equipment Restoration";
     public override string Author { get; init; } = "gorecreek";
     public override List<string>? Contributors { get; init; }
     public override SemanticVersioning.Version Version { get; init; } = new("1.0.0");

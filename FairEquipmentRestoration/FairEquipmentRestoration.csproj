@@ -26,7 +26,9 @@
     <Target Name="PackageMod" AfterTargets="Build">
         <PropertyGroup>
             <Username>gorecreek</Username>
+            <Version>1.0.0</Version>
             <FolderName>$(Username)-$(MSBuildProjectName)</FolderName>
+            <ArchiveName>$(FolderName)-$(Version)</ArchiveName>
             <ModsRoot>$(TargetDir)SPT\user\mods\$(FolderName)</ModsRoot>
             <LiveModsRoot>..\..\..\SPT\user\mods\$(FolderName)</LiveModsRoot>
         </PropertyGroup>
@@ -44,12 +46,12 @@
         <MakeDir Directories="$(ModsRoot)" />
         <Copy SourceFiles="@(ModFiles)" DestinationFolder="$(ModsRoot)" />
 
-        <Message Text="Zipping [$(TargetDir)$(FolderName).zip]..." Importance="High" />
+        <Message Text="Zipping [$(TargetDir)$(ArchiveName).zip]..." Importance="High" />
         <ItemGroup>
             <ZipFiles Include="$(ModsRoot)\**\*" />
         </ItemGroup>
 
-        <Zip ZipFileName="$(TargetDir)$(FolderName).zip"
+        <Zip ZipFileName="$(TargetDir)$(ArchiveName).zip"
              WorkingDirectory="$(TargetDir)"
              Files="@(ZipFiles)" />
 
