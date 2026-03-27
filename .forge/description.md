@@ -1,14 +1,16 @@
 In this episode of Keep Your Equipment™ mod series:
-- Keep what you had at the start of the raid (wow)
+- Keep the gear you had at the start of the raid (wow)
 - Preserve item state: anything worn, consumed, or lost stays that way after death
 - Handle insurance, transfers and the mail service
-- Configuration toggles for most features
+- Configurable behavior for secure slots
+- Configuration toggles for most other mod features
 
 ## Tabs {.tabset}
 
 ### Description
 
 An SPT mod that provides a configurable softcore implementation with the goal of delivering a more balanced experience.
+
 If you’ve ever noticed the inconsistency where softcore implementations restore all your spent ammo, meds, and gear durability, yet your character still needs to heal and satisfy thirst and hunger, this mod is for you. It aims to provide a more consistent sense of progression by also tracking the state of your equipment - what items you consumed or broke.
 
 You will need to repair your weapons and armor, replace meds and food, and refill ammo after both successful and failed raids.
@@ -20,7 +22,7 @@ Drag and drop the contents of the downloaded ZIP to the SPT root folder, just li
 
 ### Configuration
 
-The default configuration assumes that item state should always be preserved after a raid. You are free to configure it to behave almost like a full rollback (item-wise) if you want though. Changes to lostondeath.json are not supported, as they may break insurance handling in some cases.
+The default configuration assumes that item state should always be preserved after a raid. Secure slots are not affected. You are free to configure it to behave almost like a full rollback (item-wise) if you want though. Changes to lostondeath.json are not supported, as they may break insurance handling in some cases.
 
 ***
 
@@ -55,7 +57,7 @@ This is a server-only mod.
 ### Compatibility
 
 - Mods that modify raid-end behavior are likely incompatible
-- Fika compatibility unknown
+- Fika compatibility unknown. You can report issues about it if there are any, but I can't promise I will fix them.
 - SVM is compatible, but Softcore and Safe Exit must be disabled to avoid issues
 - lostondeath.json wipeOnRaidStart=true prevents the mod from working because the mod does not get the pre-raid inventory, keep set to false
 - lostondeath.json individual slot changes will work, but some setups can allow item duplication via insurance, either don't change it or don't use insurance
