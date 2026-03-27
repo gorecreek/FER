@@ -20,6 +20,24 @@ You will need to repair your weapons and armor, replace meds and food, and refil
 Drag and drop the contents of the downloaded ZIP to the SPT root folder, just like other mods.
 ![instructions](https://i.imgur.com/34vXXDj.gif)
 
+### FAQ
+
+**Q**: I went in raid, found some equipment better that I had on me and dropped the old piece. Then I died and my old equipment was not restored.
+
+**A**: This is default behavior that can be changed by setting **restoreLostItems** to true. The items you dropped are treated as lost/consumed and are not restored. Read more in **How this works** and **Configuration** sections.
+
+***
+
+**Q**: Is the mod compatible with Fika?
+
+**A**: There is a report of them working well together, so you can try it yourself. Make sure to let me know if it works!
+
+***
+
+**Q**: How is this different from Keep Starting Gear?
+
+**A**: This mod has features that punish you for dying while still restoring your gear, working like an alternate progression mod. KSG is kind of a configurable save system that saves your inventory to snapshots on disk. While both can be configured to work in a similar way, the implementation is different. Read **How this works** section and our github repos to understand more.
+
 ### Configuration
 
 The default configuration assumes that item state should always be preserved after a raid. Secure slots are not affected. You are free to configure it to behave almost like a full rollback (item-wise) if you want though. Changes to lostondeath.json are not supported, as they may break insurance handling in some cases.
@@ -42,7 +60,7 @@ The default configuration assumes that item state should always be preserved aft
 
 When a raid ends, the mod has access to your pre-raid inventory, your post-raid inventory, and a list of transferred and lost insured items.
 
-Pre-raid inventory items are updated with their post-raid state if they still exist. Items that were lost are removed from the pre-raid inventory. Items are compared by their unique IDs.
+The pre-raid inventory is compared to the post-raid inventory using unique item IDs. If an item exists in both inventories, it's state in the pre-raid inventory is updated with it's state in the post-raid inventory (controlled by **restoreItemCondition** config option). If an item exists only in the pre-raid inventory, it is treated as lost and removed from the pre-raid inventory (controlled by **restoreLostItems** config option). Then your inventory is set to this updated pre-raid inventory.
 
 Items in safe slots are excluded from this process. Transferred items are not returned, even if the config option is on. Insured items that are restored by the mod do not go through the insurance system.
 
@@ -57,7 +75,7 @@ This is a server-only mod.
 ### Compatibility
 
 - Mods that modify raid-end behavior are likely incompatible
-- Fika compatibility unknown. You can report issues about it if there are any, but I can't promise I will fix them.
+- Fika compatibility unknown. You can report issues about it if there are any, but I can't promise I will fix them
 - SVM is compatible, but Softcore and Safe Exit must be disabled to avoid issues
 - lostondeath.json wipeOnRaidStart=true prevents the mod from working because the mod does not get the pre-raid inventory, keep set to false
 - lostondeath.json individual slot changes will work, but some setups can allow item duplication via insurance, either don't change it or don't use insurance

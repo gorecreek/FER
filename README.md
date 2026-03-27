@@ -33,7 +33,7 @@ The default configuration assumes that item state should always be preserved aft
 ## How this works
 When a raid ends, the mod has access to your pre-raid inventory, your post-raid inventory, and a list of transferred and lost insured items.
 
-Pre-raid inventory items are updated with their post-raid state if they still exist. Items that were lost are removed from the pre-raid inventory. Items are compared by their unique IDs.
+The pre-raid inventory is compared to the post-raid inventory using unique item IDs. If an item exists in both inventories, it's state in the pre-raid inventory is updated with it's state in the post-raid inventory (controlled by **restoreItemCondition** config option). If an item exists only in the pre-raid inventory, it is treated as lost and removed from the pre-raid inventory (controlled by **restoreLostItems** config option). Then your inventory is set to this updated pre-raid inventory.
 
 Items in safe slots are excluded from this process. Transferred items are not returned, even if the config option is on. Insured items that are restored by the mod do not go through the insurance system.
 
@@ -45,7 +45,7 @@ This is a server-only mod.
 
 ## Compatibility
 - Mods that modify raid-end behavior are likely incompatible
-- Fika compatibility unknown. You can report issues about it if there are any, but I can't promise I will fix them.
+- Fika compatibility unknown. You can report issues about it if there are any, but I can't promise I will fix them
 - SVM is compatible, but Softcore and Safe Exit must be disabled to avoid issues
 - lostondeath.json wipeOnRaidStart=true prevents the mod from working because the mod does not get the pre-raid inventory, keep set to false
 - lostondeath.json individual slot changes will work, but some setups can allow item duplication via insurance, either don't change it or don't use insurance
