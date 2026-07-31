@@ -66,6 +66,8 @@ Items in safe slots are excluded from this process. Transferred items are not re
 
 This creates several edge cases where the mod is unable to place an item back into your pre-raid inventory. In such cases, the item is sent via the game's mail service (a message from SYSTEM).
 
+Also note that the mod does not restore quest progress, so in-raid quest rewards from BTR driver or Lightkeeper will not be restored if you lose them. Try using something like [this](https://forge.sp-tarkov.com/mod/2150/no-save-on-death-respawned) if you need complete restoration.
+
 As a bonus, the mod fixes an existing SPT issue where insured items thrown directly out of the secure container are not returned via insurance.
 
 ***
