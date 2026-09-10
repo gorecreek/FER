@@ -14,7 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Update="Config\config.json">
+        <None Update="Config\config.jsonc">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
     </ItemGroup>
