@@ -1,23 +1,23 @@
 ﻿using FairEquipmentRestoration.Accessors;
 using FairEquipmentRestoration.Exceptions;
 using FairEquipmentRestoration.Extensions;
+using Microsoft.Extensions.Logging;
+using SPTarkov.Common.Models.Logging;
 using SPTarkov.DI.Annotations;
-using SPTarkov.Server.Core.Helpers;
+using SPTarkov.Server.Core.Helpers.InRaid;
 using SPTarkov.Server.Core.Models.Common;
 using SPTarkov.Server.Core.Models.Eft.Common;
 using SPTarkov.Server.Core.Models.Eft.Common.Tables;
-using SPTarkov.Server.Core.Models.Spt.Logging;
-using SPTarkov.Server.Core.Models.Utils;
 using SPTarkov.Server.Core.Utils.Cloners;
 
 namespace FairEquipmentRestoration.Services
 {
     [Injectable]
     public class LostOnDeathHelper(
+        ISptLogger<LostOnDeathHelper> logger,
         InRaidHelperAccessor inRaidHelperAccessor,
         InRaidHelper inRaidHelper,
         InRaidHelperProvider inRaidHelperProvider,
-        ISptLogger<LostOnDeathHelper> logger,
         ICloner cloner,
         ItemLogHelper itemLogHelper)
     {

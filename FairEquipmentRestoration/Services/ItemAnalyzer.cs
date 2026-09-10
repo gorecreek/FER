@@ -1,12 +1,12 @@
 ﻿using FairEquipmentRestoration.Config;
 using FairEquipmentRestoration.Extensions;
 using FairEquipmentRestoration.Models;
+using Microsoft.Extensions.Logging;
+using SPTarkov.Common.Models.Logging;
 using SPTarkov.DI.Annotations;
 using SPTarkov.Server.Core.Models.Common;
 using SPTarkov.Server.Core.Models.Eft.Common;
 using SPTarkov.Server.Core.Models.Eft.Common.Tables;
-using SPTarkov.Server.Core.Models.Spt.Logging;
-using SPTarkov.Server.Core.Models.Utils;
 
 namespace FairEquipmentRestoration.Services
 {
@@ -14,11 +14,9 @@ namespace FairEquipmentRestoration.Services
     public class ItemAnalyzer(
         ISptLogger<ItemAnalyzer> logger,
         ItemLogHelper itemLogHelper,
-        ModConfigProvider modConfigProvider,
+        FairEquipmentRestorationConfig modConfig,
         LostOnDeathHelper lostOnDeathHelper)
     {
-        protected readonly FairEquipmentRestorationConfig Config = modConfigProvider.Get();
-
         public InventoryDiffAnalysis AnalyzeInventoryDiff(
             PmcData preRaidProfile,
             PmcData postRaidProfile,
@@ -75,7 +73,7 @@ namespace FairEquipmentRestoration.Services
             PmcData postRaidProfile)
         {
             var lostUnableToReturnItemIds = new HashSet<MongoId>();
-            if (Config.RestoreOnlyLostOnDeathSlots)
+            if (modConfig.RestoreOnlyLostOnDeathSlots)
             {
                 var wasKept = lostOnDeathHelper.IsItemKeptAfterDeath(preRaidItem.Id, ctx.GetDict(Inventory.PreRaid), preRaidProfile);
                 var isKept = lostOnDeathHelper.IsItemKeptAfterDeath(postRaidItem.Id, ctx.GetDict(Inventory.PostRaid), postRaidProfile);
@@ -105,9 +103,9 @@ namespace FairEquipmentRestoration.Services
             var orphanedItemIds = new HashSet<MongoId>();
 
             var isItemTransferred = transferredItemIds.Contains(preRaidItem.Id);
-            if (Config.RestoreLostItems)
+            if (modConfig.RestoreLostItems)
             {
-                var isKept = Config.RestoreOnlyLostOnDeathSlots
+                var isKept = modConfig.RestoreOnlyLostOnDeathSlots
                     && lostOnDeathHelper.IsItemKeptAfterDeath(preRaidItem.Id, ctx.GetDict(Inventory.PreRaid), preRaidProfile);
                 if (isKept && !isItemTransferred)
                 {
@@ -116,7 +114,7 @@ namespace FairEquipmentRestoration.Services
                 }
             }
 
-            if (!Config.RestoreLostItems || isItemTransferred)
+            if (!modConfig.RestoreLostItems || isItemTransferred)
             {
                 lostItemIds.Add(preRaidItem.Id);
 
@@ -137,7 +135,7 @@ namespace FairEquipmentRestoration.Services
             IReadOnlySet<MongoId> orphanedItemIds,
             ItemDiffAnalysis analysis)
         {
-            if (!Config.EnableItemDebugLogging)
+            if (!modConfig.EnableItemDebugLogging)
             {
                 return;
             }
@@ -168,7 +166,7 @@ namespace FairEquipmentRestoration.Services
             PmcData profile,
             InventoryContext ctx)
         {
-            var restoreLostOnDeath = Config.RestoreOnlyLostOnDeathSlots;
+            var restoreLostOnDeath = modConfig.RestoreOnlyLostOnDeathSlots;
             var postRaidInventoryDict = ctx.GetDict(Inventory.PostRaid);
             var filtered = analysis.OrphanedItemIds
                 .Except(analysis.LostItemIds)
@@ -196,7 +194,7 @@ namespace FairEquipmentRestoration.Services
             {
                 var postRaidItem = ctx.GetItem(Inventory.PostRaid, preRaidItem.Id);
                 // Ideally also check if item was transferred but they shouldnt exist in that collection
-                if (postRaidItem is not null || Config.RestoreLostItems)
+                if (postRaidItem is not null || modConfig.RestoreLostItems)
                 {
                     itemIdsToExclude.Add(preRaidItem.Id);
                 }

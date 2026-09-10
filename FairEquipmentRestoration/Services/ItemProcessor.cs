@@ -2,15 +2,15 @@
 using FairEquipmentRestoration.Exceptions;
 using FairEquipmentRestoration.Extensions;
 using FairEquipmentRestoration.Models;
+using Microsoft.Extensions.Logging;
+using SPTarkov.Common.Models.Logging;
 using SPTarkov.DI.Annotations;
 using SPTarkov.Server.Core.Extensions;
-using SPTarkov.Server.Core.Helpers;
+using SPTarkov.Server.Core.Helpers.Profile;
 using SPTarkov.Server.Core.Models.Common;
 using SPTarkov.Server.Core.Models.Eft.Common;
 using SPTarkov.Server.Core.Models.Eft.Common.Tables;
-using SPTarkov.Server.Core.Models.Spt.Logging;
-using SPTarkov.Server.Core.Models.Utils;
-using SPTarkov.Server.Core.Services;
+using SPTarkov.Server.Core.Services.Commerce;
 
 namespace FairEquipmentRestoration.Services
 {
@@ -19,12 +19,10 @@ namespace FairEquipmentRestoration.Services
         ISptLogger<ItemProcessor> logger,
         ItemLogHelper itemLogHelper,
         InventoryHelper inventoryHelper,
-        ModConfigProvider modConfigProvider,
         LostOnDeathHelper lostOnDeathHelper,
-        MailSendService mailService)
+        MailSendService mailService,
+        FairEquipmentRestorationConfig modConfig)
     {
-        protected readonly FairEquipmentRestorationConfig Config = modConfigProvider.Get();
-
         public void ApplyItemChanges(
             PmcData restoredProfile,
             PmcData preRaidProfile,
@@ -88,11 +86,11 @@ namespace FairEquipmentRestoration.Services
 
             var originalFiR = item.Upd?.SpawnedInSession;
             var newFiR = otherItem.Upd?.SpawnedInSession;
-            var firToSet = Config.RestoreFoundInRaid
+            var firToSet = modConfig.RestoreFoundInRaid
                 ? originalFiR
                 : newFiR;
 
-            if (!Config.RestoreItemCondition)
+            if (!modConfig.RestoreItemCondition)
             {
                 item.Upd = otherItem.Upd;
             }
@@ -123,7 +121,7 @@ namespace FairEquipmentRestoration.Services
             }
 
             // Treat items in stack as lost and restore them if restoreLostItems is true
-            var stackCountToSet = Config.RestoreLostItems
+            var stackCountToSet = modConfig.RestoreLostItems
                 ? originalStack
                 : minStack;
 
@@ -136,7 +134,7 @@ namespace FairEquipmentRestoration.Services
 
             foreach (var itemId in itemIds)
             {
-                if (Config.EnableItemDebugLogging)
+                if (modConfig.EnableItemDebugLogging)
                 {
                     logger.Debug($"Removing lost pre-raid item: {itemId}");
                 }
@@ -211,7 +209,7 @@ namespace FairEquipmentRestoration.Services
             foreach (var id in firItemIds)
             {
                 var item = ctx.GetItem(Inventory.Restored, id);
-                var isKept = Config.RestoreOnlyLostOnDeathSlots
+                var isKept = modConfig.RestoreOnlyLostOnDeathSlots
                     && lostOnDeathHelper.IsItemKeptAfterDeath(id, ctx.GetDict(Inventory.Restored), profile);
                 if (item?.Upd is not null && !isKept)
                 {

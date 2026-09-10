@@ -1,26 +1,19 @@
 ﻿using HarmonyLib;
 using SPTarkov.DI.Annotations;
 using SPTarkov.Server.Core.Models.Spt.Config;
-using SPTarkov.Server.Core.Servers;
 using SPTarkov.Server.Core.Utils.Cloners;
-using System.Reflection;
 
 namespace FairEquipmentRestoration.Services
 {
     [Injectable]
-#pragma warning disable CS0618 // Type or member is obsolete
-    public class ConfigHelper(ConfigServer configServer, ICloner cloner)
-#pragma warning restore CS0618 // Type or member is obsolete
+    public class ConfigHelper(LostOnDeathConfig lostOnDeathConfig, ICloner cloner)
     {
         public LostOnDeathConfig GetInvertedLostOnDeathConfig()
         {
-#pragma warning disable CS0618 // Type or member is obsolete
-            var config = configServer.GetConfig<LostOnDeathConfig>();
-#pragma warning restore CS0618 // Type or member is obsolete
-            var newConfig = cloner.Clone(config)!;
+            var newConfig = cloner.Clone(lostOnDeathConfig)!;
 
-            newConfig.SpecialSlotItems = !config.SpecialSlotItems;
-            newConfig.QuestItems = !config.QuestItems;
+            newConfig.SpecialSlotItems = !lostOnDeathConfig.SpecialSlotItems;
+            newConfig.QuestItems = !lostOnDeathConfig.QuestItems;
 
             InvertLostEquipment(newConfig.Equipment);
 

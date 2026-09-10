@@ -1,10 +1,9 @@
-﻿using HarmonyLib;
+﻿using SPTarkov.Common.Models.Logging;
 using SPTarkov.DI.Annotations;
-using SPTarkov.Server.Core.Helpers;
+using SPTarkov.Server.Core.Helpers.InRaid;
+using SPTarkov.Server.Core.Helpers.Profile;
 using SPTarkov.Server.Core.Models.Spt.Config;
-using SPTarkov.Server.Core.Models.Utils;
-using SPTarkov.Server.Core.Servers;
-using SPTarkov.Server.Core.Services;
+using SPTarkov.Server.Core.Models.Spt.Tables;
 using SPTarkov.Server.Core.Utils.Cloners;
 
 namespace FairEquipmentRestoration.Services
@@ -12,21 +11,29 @@ namespace FairEquipmentRestoration.Services
     [Injectable]
     public class InRaidHelperProvider(
         ISptLogger<InRaidHelper> logger,
+        TemplateTable templateTable,
         InventoryHelper inventoryHelper,
-#pragma warning disable CS0618 // Type or member is obsolete
-        ConfigServer configServer,
-#pragma warning restore CS0618 // Type or member is obsolete
+        InRaidConfig inRaidConfig,
         ICloner cloner,
-        DatabaseService databaseService,
         ConfigHelper configHelper
     )
     {
+        /*
         public InRaidHelper GetWithInvertedLostOnDeathConfig()
         {
-            var helper = new InRaidHelper(logger, inventoryHelper, configServer, cloner, databaseService);
+            var helper = new InRaidHelper(logger, templateTable, inventoryHelper, inRaidConfig, lostOnDeathConfig, cloner);
             var config = configHelper.GetInvertedLostOnDeathConfig();
 
             Traverse.Create(helper).Field<LostOnDeathConfig>("LostOnDeathConfig").Value = config;
+
+            return helper;
+        }*/
+
+        //works like that now?
+        public InRaidHelper GetWithInvertedLostOnDeathConfig()
+        {
+            var invertedLostOnDeathConfig = configHelper.GetInvertedLostOnDeathConfig();
+            var helper = new InRaidHelper(logger, templateTable, inventoryHelper, inRaidConfig, invertedLostOnDeathConfig, cloner);
 
             return helper;
         }

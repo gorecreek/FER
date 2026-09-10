@@ -1,10 +1,13 @@
 ﻿using FairEquipmentRestoration.Config;
 using FairEquipmentRestoration.Extensions;
+using Microsoft.Extensions.Logging;
+using SPTarkov.Common.Models.Logging;
 using SPTarkov.DI.Annotations;
 using SPTarkov.Server.Core.Models.Common;
 using SPTarkov.Server.Core.Models.Eft.Common;
 using SPTarkov.Server.Core.Models.Eft.Common.Tables;
 using SPTarkov.Server.Core.Models.Spt.Logging;
+using SPTarkov.Server.Core.Models.Spt.Tables;
 using SPTarkov.Server.Core.Models.Utils;
 using SPTarkov.Server.Core.Services;
 using System.Text;
@@ -14,14 +17,12 @@ namespace FairEquipmentRestoration.Services
     [Injectable]
     public class ItemLogHelper(
         ISptLogger<ItemLogHelper> logger,
-        DatabaseService databaseService,
-        ModConfigProvider modConfigProvider)
+        TemplateTable templateTable,
+        FairEquipmentRestorationConfig config)
     {
-        protected readonly FairEquipmentRestorationConfig Config = modConfigProvider.Get();
-
         public void LogItems(LogLevel level, IReadOnlyList<Item>? items, IReadOnlyList<Item>? inventoryItems, string? message = null)
         {
-            if (!Config.EnableItemDebugLogging)
+            if (!config.EnableItemDebugLogging)
             {
                 return;
             }
@@ -45,7 +46,7 @@ namespace FairEquipmentRestoration.Services
 
         public void LogInsuredItems(LogLevel level, IReadOnlyList<InsuredItem>? items, IReadOnlyList<Item>? inventoryItems, string? message = null)
         {
-            if (!Config.EnableItemDebugLogging)
+            if (!config.EnableItemDebugLogging)
             {
                 return;
             }
@@ -88,7 +89,7 @@ namespace FairEquipmentRestoration.Services
 
         public void LogItem(LogLevel level, Item? item, IReadOnlyList<Item>? inventoryItems, string? message = null)
         {
-            if (!Config.EnableItemDebugLogging)
+            if (!config.EnableItemDebugLogging)
             {
                 return;
             }
@@ -105,7 +106,7 @@ namespace FairEquipmentRestoration.Services
                 return;
             }
 
-            var dbItems = databaseService.GetItems();
+            var dbItems = templateTable.Items;
             var template = dbItems.GetValueOrDefault(item.Template);
             var parentTemplate = GetItemTemplate(item.ParentId, inventoryItems, dbItems);
 
@@ -114,7 +115,7 @@ namespace FairEquipmentRestoration.Services
 
         public void LogInventory(LogLevel level, PmcData? profile, bool logAllItems = false, string? message = null)
         {
-            if (!Config.EnableItemDebugLogging)
+            if (!config.EnableItemDebugLogging)
             {
                 return;
             }
@@ -140,7 +141,7 @@ namespace FairEquipmentRestoration.Services
                 logger.Log(level, message);
             }
 
-            var dbItems = databaseService.GetItems();
+            var dbItems = templateTable.Items;
             foreach (var item in inventoryItems)
             {
                 var template = dbItems.GetValueOrDefault(item.Template);

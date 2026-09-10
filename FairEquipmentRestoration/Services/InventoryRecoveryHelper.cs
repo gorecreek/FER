@@ -1,13 +1,13 @@
 ﻿using FairEquipmentRestoration.Config;
 using FairEquipmentRestoration.Extensions;
 using FairEquipmentRestoration.Models;
+using Microsoft.Extensions.Logging;
+using SPTarkov.Common.Models.Logging;
 using SPTarkov.DI.Annotations;
-using SPTarkov.Server.Core.Helpers;
+using SPTarkov.Server.Core.Helpers.InRaid;
 using SPTarkov.Server.Core.Models.Common;
 using SPTarkov.Server.Core.Models.Eft.Common;
 using SPTarkov.Server.Core.Models.Eft.Common.Tables;
-using SPTarkov.Server.Core.Models.Spt.Logging;
-using SPTarkov.Server.Core.Models.Utils;
 using SPTarkov.Server.Core.Utils.Cloners;
 
 namespace FairEquipmentRestoration.Services
@@ -21,10 +21,8 @@ namespace FairEquipmentRestoration.Services
         ItemAnalyzer itemAnalyzer,
         ItemProcessor itemProcessor,
         LostOnDeathHelper lostOnDeathHelper,
-        ModConfigProvider modConfigProvider)
+        FairEquipmentRestorationConfig modConfig)
     {
-        protected readonly FairEquipmentRestorationConfig Config = modConfigProvider.Get();
-
         public List<Item>? GetFilteredLostInsuredItems(
             IEnumerable<Item>? lostInsuredItems, 
             PmcData preRaidProfile,
@@ -64,7 +62,7 @@ namespace FairEquipmentRestoration.Services
             var restoredProfile = GetRestoredProfile(preRaidProfile, postRaidProfile, analysis, sessionId);
             var firItemIds = restoredProfile.GetFiRItemIds();
 
-            if (Config.EnableItemDebugLogging)
+            if (modConfig.EnableItemDebugLogging)
             {
                 foreach (var itemId in firItemIds)
                 {
@@ -99,7 +97,7 @@ namespace FairEquipmentRestoration.Services
 
             itemLogHelper.LogInventory(LogLevel.Debug, newProfile, message: "Processed restored inventory:");
 
-            if (Config.RestoreOnlyLostOnDeathSlots)
+            if (modConfig.RestoreOnlyLostOnDeathSlots)
             {
                 lostOnDeathHelper.ReplaceItemsNotLostOnDeath(newProfile, postRaidProfile, sessionId);
             }
@@ -121,7 +119,7 @@ namespace FairEquipmentRestoration.Services
             // so need to update it here if we want to preserve insurance
             serverProfile.InsuredItems = profile.InsuredItems;
 
-            if (Config.RestoreFoundInRaid)
+            if (modConfig.RestoreFoundInRaid)
             {
                 itemProcessor.RestoreFiRStatusOnItems(serverProfile, restoredProfile.FiRItemIds);
             }
