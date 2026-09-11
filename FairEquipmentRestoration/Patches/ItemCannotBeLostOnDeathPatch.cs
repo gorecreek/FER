@@ -1,5 +1,5 @@
 ﻿using FairEquipmentRestoration.Config;
-using SPTarkov.Common.Models.Logging;
+using SPTarkov.DI.Annotations;
 using SPTarkov.Reflection.Patching;
 using SPTarkov.Server.Core.Models.Eft.Common.Tables;
 using SPTarkov.Server.Core.Services.Commerce;
@@ -7,6 +7,7 @@ using System.Reflection;
 
 namespace FairEquipmentRestoration.Patches;
 
+[Injectable]
 public class ItemCannotBeLostOnDeathPatch : AbstractPatch
 {
     private static FairEquipmentRestorationConfig _config = default!;

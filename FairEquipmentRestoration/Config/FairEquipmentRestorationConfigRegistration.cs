@@ -6,22 +6,25 @@ namespace FairEquipmentRestoration.Config
 {
     public class FairEquipmentRestorationConfigRegistration : IOnDIConstruct
     {
-        private static ModHelper _modHelper = default!;
-
-        public FairEquipmentRestorationConfigRegistration(ModHelper modHelper)
+        public static Task OnDIConstructAsync(
+            IServiceCollection serviceCollection,
+            CancellationToken cancellationToken)
         {
-        }
+            // TODO: rewrite more idiomatically
+            var serviceProvider = serviceCollection.BuildServiceProvider();
+            var modHelper = serviceProvider.GetService<ModHelper>();
 
-        public static Task OnDIConstructAsync(IServiceCollection serviceCollection, CancellationToken cancellationToken)
-        {
-            FairEquipmentRestorationConfig config = LoadConfigFromDisk();
+            FairEquipmentRestorationConfig config = LoadConfigFromDisk(modHelper!);
             serviceCollection.AddSingleton(config);
-
+            
             return Task.CompletedTask;
         }
 
-        private static FairEquipmentRestorationConfig LoadConfigFromDisk(){
-            var config = _modHelper.GetJsonDataFromModFile<FairEquipmentRestorationConfig>(string.Empty, "config.jsonc");
+        private static FairEquipmentRestorationConfig LoadConfigFromDisk(ModHelper modHelper)
+        {
+            var config = modHelper.GetJsonDataFromModFile<FairEquipmentRestorationConfig>(
+                string.Empty, 
+                "config.jsonc");
 
             return config;
         }

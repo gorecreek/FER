@@ -2,6 +2,7 @@
 using FairEquipmentRestoration.Models;
 using FairEquipmentRestoration.Services;
 using SPTarkov.Common.Models.Logging;
+using SPTarkov.DI.Annotations;
 using SPTarkov.Reflection.Patching;
 using SPTarkov.Server.Core.Models.Common;
 using SPTarkov.Server.Core.Models.Eft.Common;
@@ -14,6 +15,7 @@ using System.Reflection;
 
 namespace FairEquipmentRestoration.Patches;
 
+[Injectable]
 public class HandleEndRaidPmcPatch : AbstractPatch
 {
     private static ISptLogger<HandleEndRaidPmcPatch> _logger = default!;
