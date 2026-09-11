@@ -18,18 +18,6 @@ namespace FairEquipmentRestoration.Services
         ConfigHelper configHelper
     )
     {
-        /*
-        public InRaidHelper GetWithInvertedLostOnDeathConfig()
-        {
-            var helper = new InRaidHelper(logger, templateTable, inventoryHelper, inRaidConfig, lostOnDeathConfig, cloner);
-            var config = configHelper.GetInvertedLostOnDeathConfig();
-
-            Traverse.Create(helper).Field<LostOnDeathConfig>("LostOnDeathConfig").Value = config;
-
-            return helper;
-        }*/
-
-        //works like that now?
         public InRaidHelper GetWithInvertedLostOnDeathConfig()
         {
             var invertedLostOnDeathConfig = configHelper.GetInvertedLostOnDeathConfig();

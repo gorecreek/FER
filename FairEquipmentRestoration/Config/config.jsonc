@@ -33,5 +33,5 @@
 
   // Enable item debug logs, will dump everything
   // Default = false
-  "enableItemDebugLogging": true
+  "enableItemDebugLogging": false
 }

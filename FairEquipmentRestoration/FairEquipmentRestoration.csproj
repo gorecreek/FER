@@ -25,7 +25,7 @@
             <Version>1.0.0</Version>
             <FolderName>$(Author)-$(AssemblyName)</FolderName>
             <ArchiveName>$(FolderName)-$(Version)</ArchiveName>
-            <ModsRoot>$(TargetDir)SPT_Runtime\user\mods\$(FolderName)</ModsRoot>
+            <ModsRoot>$(TargetDir)organized\SPT_Runtime\user\mods\$(FolderName)</ModsRoot>
         </PropertyGroup>
 
         <ItemGroup>
@@ -40,7 +40,7 @@
         <Message Text="Zipping [$(TargetDir)$(ArchiveName).zip]..." Importance="High" />
 
         <ZipDirectory
-            SourceDirectory="$(OutputPath)\SPT_Runtime"
+            SourceDirectory="$(OutputPath)\organized\"
             DestinationFile="$(TargetDir)$(ArchiveName).zip"
             Overwrite="true" />
 
