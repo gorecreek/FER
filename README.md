@@ -1,9 +1,9 @@
 # Fair Equipment Restoration
-An SPT mod that provides a configurable softcore implementation with the goal of delivering a more balanced experience.
+An SPT mod that provides a configurable equipment restoration mechanics with the goal of delivering a more balanced experience. 
 
-If you’ve ever noticed the inconsistency where softcore implementations restore all your spent ammo, meds, and gear durability, yet your character still needs to heal and satisfy thirst and hunger, this mod is for you. It aims to provide a more consistent sense of progression by also tracking the state of your equipment - what items you consumed or broke.
+In vanilla, you lose most of your equipment on death or MIA. You also have to heal your wounds and satisfy thirst and hunger regardless of the outcome of the raid. This mod applies the same concept to your equipment: it is not lost, but always has to be taken care of, which should give you a sense of consistent progression.
 
-You will need to repair your weapons and armor, replace meds and food, and refill ammo after both successful and failed raids.
+Put simply, you will need to repair your weapons and armor, replace meds and food, and refill ammo after both successful and failed raids.
 
 ## Features
 - Keep the gear you had at the start of the raid
@@ -22,7 +22,7 @@ The default configuration assumes that item state should always be preserved aft
 
 **restoreItemCondition**: If disabled, item wear accumulated during the raid will not be restored. For example, if you died from a chest shot, your chest plate will remain damaged after restoration. Weapons will also eventually need repairs even if you never survive raids. Disabled by default.
 
-**restoreOnlyLostOnDeathSlots**: If enabled, only items from lost-on-death slots (defined by `SPT\SPT_Data\configs\lostondeath.json`) are processed. Your secure container, special slots, melee and similar are unaffected by the mod. Enabled by default.
+**restoreOnlyLostOnDeathSlots**: If enabled, only items from lost-on-death slots (defined by `SPT_Runtime\SPT_Data\configs\lostondeath.json`) are processed. Your secure container, special slots, melee and similar are unaffected by the mod. Enabled by default.
 
 **updateOnTransfer**: If enabled, the saved inventory is updated on transfer. Disabled by default.
 
@@ -47,7 +47,7 @@ This is a server-only mod.
 
 ## Compatibility
 - Mods that modify raid-end behavior are likely incompatible
-- Fika compatibility unknown. You can report issues about it if there are any, but I can't promise I will fix them
+- Judging by user reports, Fika appears to be compatible. Some weird situations can happen, though: if a bot or someone else loots your stuff, it will not be restored (when using restoreLostItems=false), because the server will not see these items in your post-raid inventory. In singleplayer the raid end server call happens right after your character's death and nobody can snatch your items between these events.
 - SVM is compatible, but Softcore and Safe Exit must be disabled to avoid issues
 - lostondeath.json wipeOnRaidStart=true prevents the mod from working because the mod does not get the pre-raid inventory, keep set to false
 - lostondeath.json individual slot changes will work, but some setups can allow item duplication via insurance, either don't change it or don't use insurance
@@ -56,4 +56,5 @@ This is a server-only mod.
 ## Known issues
 - **restoreLostItems=false** Splitting item stacks in raid causes the split portion to be treated as lost and not returned, even if it was still in your inventory on death
 - **restoreLostItems=false** Removing ammo from a magazine is treated as a loss for the same reason: stack splitting creates a new item with a new ID
-- **restoreInsurance=true, restoreLost=false** Items returned via the mail service (not through insurance) will not retain insurance
+- **restoreInsurance=true, restoreLostItems=false** Items returned via the mail service (not through insurance) will not retain insurance
+- [1.1.0] **restoreLostItems=false** Ammo in mags sometimes returns in pre-raid quantities
