@@ -22,7 +22,7 @@
     <Target Name="PackageMod" AfterTargets="Build">
         <PropertyGroup>
             <Author>gorecreek</Author>
-            <Version>1.0.0</Version>
+            <Version>1.1.0</Version>
             <FolderName>$(Author)-$(AssemblyName)</FolderName>
             <ArchiveName>$(FolderName)-$(Version)</ArchiveName>
             <ModsRoot>$(TargetDir)organized\SPT_Runtime\user\mods\$(FolderName)</ModsRoot>
